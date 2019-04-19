@@ -13,6 +13,7 @@ def graficoTiempo(sound):
 	y=sound[1]
 	py.figure(1)
 	py.plot(x,y)
+	py.title("Amplitud v/s Tiempo")
 	py.xlabel("Tiempo (s)")
 	py.ylabel("Muestra")
 
@@ -22,6 +23,7 @@ def frecuenciaFourier(sound):
 	freq = np.fft.fftfreq(sound[1].size,1/sound[0])
 	py.figure(2)
 	py.plot(freq,np.absolute(transformada))
+	py.title("Amplitud v/s Frecuencia")
 	py.xlabel('Frecuencia')
 	py.ylabel('Amplitud')
 	#py.show()
@@ -39,7 +41,7 @@ def frecuenciaFourierTruncado(transformada):
 	#py.subplot(4,1,3)
 	py.figure(3)
 	py.plot(freq,np.absolute(copyT))
-	py.title("Frecuencia truncada")
+	py.title("Transformada De Fourier truncada")
 	py.xlabel('Frecuencia(Hz)')
 	py.ylabel('Amplitud')
 	#py.show()
@@ -51,10 +53,10 @@ def inversaTruncada(copyT, sound):
 	x = np.linspace(0,sound[1].size/sound[0],sound[1].size)
 	py.figure(4)
 	py.plot(x,inversa)
-	py.title("Frecuencia truncada inversa")
+	py.title("Transformada inversa de Fourier truncada")
 	py.xlabel('Tiempo')
 	py.ylabel('Amplitud')
-	#py.show()
+	py.show()
 	wavfile.write("test.wav",sound[0],inversa)
 	return inversa
 
