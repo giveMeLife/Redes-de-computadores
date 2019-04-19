@@ -24,7 +24,7 @@ def frecuenciaFourier(sound):
 	py.plot(freq,np.absolute(transformada))
 	py.xlabel('Frecuencia')
 	py.ylabel('Amplitud')
-	py.show()
+	#py.show()
 	return transformada,freq
 
 ################ Grafico de Frecuencia truncado #######################
@@ -42,7 +42,7 @@ def frecuenciaFourierTruncado(transformada):
 	py.title("Frecuencia truncada")
 	py.xlabel('Frecuencia(Hz)')
 	py.ylabel('Amplitud')
-	py.show()
+	#py.show()
 	return copyT
 
 ################ Grafico de Frecuencia truncado inversa #######################
