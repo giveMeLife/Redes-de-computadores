@@ -58,8 +58,22 @@ def inversaTruncada(copyT, sound):
 	wavfile.write("test.wav",sound[0],inversa)
 	return inversa
 
+
+def errorCuadtratico(real,calculado):
+	sumatoria = 0
+	for x in range(73113):
+		sumatoria = sumatoria + (calculado[x]-real[x])**2
+	print(sumatoria)
+	div = sumatoria / 73113.0
+	raiz = np.sqrt(div)
+	return raiz
+
+
 sound = readFile("handel.wav")
 graficoTiempo(sound)
 transformada, freq = frecuenciaFourier(sound)
 copyT = frecuenciaFourierTruncado(transformada)
 inversa = inversaTruncada(copyT,sound)
+error = errorCuadtratico(sound[1],inversa)
+
+print(error)
