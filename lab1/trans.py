@@ -54,12 +54,12 @@ def inversaTruncada(copyT, sound):
 	py.title("Frecuencia truncada inversa")
 	py.xlabel('Tiempo')
 	py.ylabel('Amplitud')
-	py.show()
+	#py.show()
 	wavfile.write("test.wav",sound[0],inversa)
 	return inversa
 
 
-def errorCuadtratico(real,calculado):
+def errorCuadratico(real,calculado):
 	sumatoria = 0
 	for x in range(73113):
 		sumatoria = sumatoria + (calculado[x]-real[x])**2
@@ -73,7 +73,12 @@ sound = readFile("handel.wav")
 graficoTiempo(sound)
 transformada, freq = frecuenciaFourier(sound)
 copyT = frecuenciaFourierTruncado(transformada)
-inversa = inversaTruncada(copyT,sound)
-error = errorCuadtratico(sound[1],inversa)
+inversa = np.fft.ifft(transformada).real
+inversaTruncada = inversaTruncada(copyT,sound)
+errorNormalInversaTruncada = errorCuadratico(sound[1],inversaTruncada)
+errorNormalInversa = errorCuadratico(sound[1],inversa)
 
-print(error)
+print("El error cuadrático medio entre la muestra inicial, y la transformada inversa truncada es: ",errorNormalInversaTruncada)
+
+print("El error cuadrático medio entre la muestra inicial, y la transformada inversa es: ",errorNormalInversa)
+
