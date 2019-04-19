@@ -14,7 +14,8 @@ def graficoTiempo(sound):
 	py.figure(1)
 	py.plot(x,y)
 	py.xlabel("Tiempo (s)")
-	py.ylabel("Muestra")
+	py.ylabel("Amplitud")
+	py.title("Funcion en el Tiempo original")
 
 ################ Grafico de Frecuencia #######################
 def frecuenciaFourier(sound):
