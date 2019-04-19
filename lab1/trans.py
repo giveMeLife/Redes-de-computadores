@@ -57,13 +57,12 @@ def frecuenciaFourierTruncado(transformada):
 	for x in range(12000,36556):
 		copyT[x] = 0
 		copyT[73112 - x] = 0
-	#py.subplot(4,1,3)
 	'''py.figure(3)
 	py.plot(freq,np.absolute(copyT),'m')
 	py.title("Transformada De Fourier truncada")
 	py.xlabel('Frecuencia(Hz)')
-	py.ylabel('Amplitud')'''
-	#py.show()
+	py.ylabel('Amplitud')
+	#py.show()'''
 	return copyT
 
 #Gráfico transformada de Fourier inversa truncada y genera un archivo de sonido nuevo
