@@ -3,6 +3,11 @@ import matplotlib.pyplot as py
 import scipy.io.wavfile as wavfile
 from scipy.fftpack import fft
 
+'''
+	Codigo realizado por Juan Fernandez y Vicente Vega.
+	Acotacion: Para ver algun grafico solo se debe descomentar el codigo asociado en la funcion.
+'''
+
 #Descripción: Función que permite leer un archivo de sonido .wav en el directorio del programa
 #Entradas: Un string que es el nombre del archivo a leer
 #Salida: Un arreglo donde su primer elemento es la cantidad de muestras obtenidas en un segundo
@@ -57,7 +62,6 @@ def frecuenciaFourierTruncado(transformada):
 	for x in range(12000,36556):
 		copyT[x] = 0
 		copyT[73112 - x] = 0
-	#py.subplot(4,1,3)
 	'''py.figure(3)
 	py.plot(freq,np.absolute(copyT),'m')
 	py.title("Transformada De Fourier truncada")
@@ -92,7 +96,6 @@ def errorCuadratico(real,calculado):
 	sumatoria = 0
 	for x in range(73113):
 		sumatoria = sumatoria + (calculado[x]-real[x])**2
-	print(sumatoria)
 	div = sumatoria / 73113.0
 	raiz = np.sqrt(div)
 	return raiz
