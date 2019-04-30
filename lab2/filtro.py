@@ -9,11 +9,24 @@ def readFile(nombre):
 	sound = wavfile.read(nombre)
 	return sound
 
+def filtradoBajo(sound):
+	transformada = np.fft.fft(sound[1])
+	b, a = signal.butter(2, 0.05,'low',analog=True)
+	y = signal.filtfilt(b, a, transformada)
+	inversa = np.fft.ifft(y).real
+	wavfile.write("filtradoBajo.wav",sound[0],inversa)
+
+
+def filtradoAlto(sound):
+	transformada = np.fft.fft(sound[1])
+	b, a = signal.butter(2, 0.005,'high',analog=True)
+	y = signal.filtfilt(b, a, transformada)
+	inversa = np.fft.ifft(y).real
+	wavfile.write("filtradoAlto.wav",sound[0],inversa)
+
 
 sound = readFile("handel.wav")
-transformada = np.fft.fft(sound[1])
-b, a = signal.butter(4, 100,'low',analog=True)
-y = signal.filtfilt(b, a, transformada)
-inversa = np.fft.ifft(transformada).real
-wavfile.write("filtrado.wav",sound[0],inversa)
+
+filtradoAlto(sound)
+filtradoBajo(sound)
 
