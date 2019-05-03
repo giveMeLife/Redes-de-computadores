@@ -4,15 +4,25 @@ import scipy.io.wavfile as wavfile
 from scipy import signal
 from scipy.fftpack import fft
 
-
+#Descripción: Función que permite leer un archivo de sonido .wav en el directorio del programa
+#Entradas: Un string que es el nombre del archivo a leer
+#Salida: Un arreglo donde su primer elemento es la cantidad de muestras obtenidas en un segundo
+#		 y el segundo elemento es un arreglo con el total de muestras obtenidas del archivo.
 def readFile(nombre):
 	sound = wavfile.read(nombre)
 	return sound
 
+#Descripción: Función que permite obtener la transformada de Fourier para la señal original
+#Entradas: Arreglo con los datos del audio.
+#Salida: Transformada de Fourier de la Función.
 def datosFuncionNormal(sound):
 	transformada = np.fft.fft(sound[1])
 	return transformada
 
+#Descripción: Función que aplica el filtrado bajo a los datos del audio original.
+#Entradas: Arreglo con los datos del audio original
+#Salida: Datos de la Funcion a los que se le aplicó el filtrado bajo y el segundo parametro es 
+#		la transformada de Fourier de estos datos. 
 def filtradoBajo(sound):
 	transformada = np.fft.fft(sound[1])
 	b, a = signal.butter(3, 2000,'low',fs=sound[0])
@@ -21,6 +31,10 @@ def filtradoBajo(sound):
 	wavfile.write("filtradoBajo.wav",sound[0],y)
 	return y,transformada2
 
+#Descripción: Función que aplica el filtrado alto a los datos del audio original.
+#Entradas: Arreglo con los datos del audio original
+#Salida: Datos de la Funcion a los que se le aplicó el filtrado alto y el segundo parametro es 
+#		la transformada de Fourier de estos datos. 
 def filtradoAlto(sound):
 	transformada = np.fft.fft(sound[1])
 	b, a = signal.butter(3, 2000,'high',fs=sound[0])
@@ -29,6 +43,10 @@ def filtradoAlto(sound):
 	wavfile.write("filtradoAlto.wav",sound[0],y)
 	return y,transfromada2
 
+#Descripción: Función que aplica el filtrado banda a los datos del audio original.
+#Entradas: Arreglo con los datos del audio original
+#Salida: Datos de la Funcion a los que se le aplicó el filtrado banda y el segundo parametro es 
+#		la transformada de Fourier de estos datos. 
 def filtradoBanda(sound):
 	transformada = np.fft.fft(sound[1])
 	b, a = signal.butter(5, [2000,3000],'band',fs=sound[0])
@@ -37,6 +55,11 @@ def filtradoBanda(sound):
 	wavfile.write("filtradoBanda.wav",sound[0],y)
 	return y,transformada2
 
+#Descripción: Función que grafica la amplitud versus el tiempo para los datos obtenidos con
+#			las funciones filtradoAlto, filtradoBajo y filtradoBanda, ademas de los datos originales del audio.
+#Entradas: Arreglo con la duracion del audio, datos del audio original, datos del filtrado alto, datos del filtrado bajo
+#			y datos del filtrado banda.
+#Salida:
 def graficosTiempo(x,sound,filtAlto,filtBajo,filtBanda):
 	fig3 = py.figure()
 	fig3.subplots_adjust(hspace=0.7, wspace=0.7)
@@ -61,6 +84,11 @@ def graficosTiempo(x,sound,filtAlto,filtBajo,filtBanda):
 	py.xlabel("Tiempo [s]")
 	py.ylabel("Amplitud [dB]")
 
+#Descripción: Función que grafica la amplitud versus la frecuencia para los datos obtenidos con las funciones
+#			 datosFuncionNormal, filtradoAlto, filtradoBajo y filtradoNormal.
+#Entradas: frecuencias del audio, arreglo de datos de la transformada de Fourier de la funcion original y arreglo de datos 
+#			de la transformada de Fourier para los obtenidos con los filtros alto, bajo y banda
+#Salida: 
 def graficosFrecuencia(freq, transNormal,transBajo,transBanda,transAlto):
 	fig = py.figure()
 	fig.subplots_adjust(hspace=0.7, wspace=0.7)
@@ -85,6 +113,10 @@ def graficosFrecuencia(freq, transNormal,transBajo,transBanda,transAlto):
 	py.xlabel("Frecuencia [Hz]")
 	py.ylabel("Amplitud [dB]")
 
+#Descripción: Crea el espectograma para la funcion original y los datos del filtro alto, banda y bajo.
+#Entrada: Datos de la funcion original, datos del filtrado alto, datos del filtrado bajo y datos
+#		datos del filtrado banda
+#Salida:
 def espectograma(sound,filtAlto,filtBajo,filtBanda):
 	fig2 = py.figure()
 	fig2.subplots_adjust(hspace=0.5, wspace=0.5)
@@ -121,6 +153,8 @@ def espectograma(sound,filtAlto,filtBajo,filtBanda):
 	py.xlabel("Tiempo [s]")
 	py.colorbar(imBanda).set_label('Intensidad [dB]')
 
+
+######################Bloque Principal#########################################
 sound = readFile("handel.wav")
 
 x = np.linspace(0,sound[1].size/sound[0],sound[1].size)
