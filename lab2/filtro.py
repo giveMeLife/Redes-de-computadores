@@ -11,22 +11,40 @@ def readFile(nombre):
 
 def filtradoBajo(sound):
 	transformada = np.fft.fft(sound[1])
-	b, a = signal.butter(2, 0.05,'low',analog=True)
-	y = signal.filtfilt(b, a, transformada)
-	inversa = np.fft.ifft(y).real
+	b, a = signal.butter(3, 2000,'low',fs=sound[0])
+	freq = np.fft.fftfreq(sound[1].size,1/sound[0])
+	y = signal.filtfilt(b, a, sound[1])
+	inversa = np.fft.fft(y).real
+	py.plot(freq,abs(inversa))
+	py.show()
 	wavfile.write("filtradoBajo.wav",sound[0],inversa)
 
 
 def filtradoAlto(sound):
 	transformada = np.fft.fft(sound[1])
-	b, a = signal.butter(2, 0.005,'high',analog=True)
-	y = signal.filtfilt(b, a, transformada)
+	b, a = signal.butter(2, 2000,'high',fs=sound[0])
+	y = signal.filtfilt(b, a, sound[1])
+	freq = np.fft.fftfreq(sound[1].size,1/sound[0])
 	inversa = np.fft.ifft(y).real
+	py.plot(freq,abs(inversa))
+	py.show()
 	wavfile.write("filtradoAlto.wav",sound[0],inversa)
+
+def filtradoBanda(sound):
+	transformada = np.fft.fft(sound[1])
+	b, a = signal.butter(2, [1000,4000],'band',fs=sound[0])
+	y = signal.filtfilt(b, a, sound[1])
+	freq = np.fft.fftfreq(sound[1].size,1/sound[0])
+	inversa = np.fft.ifft(y).real
+	py.plot(freq,abs(inversa))
+	py.show()
+	wavfile.write("filtradoBanda.wav",sound[0],inversa)
+
 
 
 sound = readFile("handel.wav")
 
 filtradoAlto(sound)
 filtradoBajo(sound)
+filtradoBanda(sound)
 
