@@ -37,7 +37,7 @@ def filtradoBajo(sound):
 #		la transformada de Fourier de estos datos. 
 def filtradoAlto(sound):
 	transformada = np.fft.fft(sound[1])
-	b, a = signal.butter(3, 500,'high',fs=sound[0])
+	b, a = signal.butter(3, 3000,'high',fs=sound[0])
 	y = signal.filtfilt(b, a, sound[1])
 	transfromada2 = np.fft.fft(y).real
 	wavfile.write("filtradoAlto.wav",sound[0],y)
@@ -49,7 +49,7 @@ def filtradoAlto(sound):
 #		la transformada de Fourier de estos datos. 
 def filtradoBanda(sound):
 	transformada = np.fft.fft(sound[1])
-	b, a = signal.butter(5, [2000,3000],'band',fs=sound[0])
+	b, a = signal.butter(5, [2000,4000],'band',fs=sound[0])
 	y = signal.filtfilt(b, a, sound[1])
 	transformada2 = np.fft.fft(y).real
 	wavfile.write("filtradoBanda.wav",sound[0],y)
@@ -164,7 +164,12 @@ filtAlto, transAlto = filtradoAlto(sound)
 filtBajo, transBajo = filtradoBajo(sound)
 filtBanda, transBanda = filtradoBanda(sound)
 
-graficosTiempo(x,sound,filtAlto,filtBajo,filtBanda)
-graficosFrecuencia(freq, transNormal,transBajo,transBanda,transAlto)
-espectograma(sound,filtAlto,filtBajo,filtBanda)
+#graficosTiempo(x,sound,filtAlto,filtBajo,filtBanda)
+#graficosFrecuencia(freq, transNormal,transBajo,transBanda,transAlto)
+#espectograma(sound,filtAlto,filtBajo,filtBanda)
+
+py.title("Frecuencia con Filtro Banda")
+py.plot(freq,abs(transBanda))
+py.xlabel("Frecuencia [Hz]")
+py.ylabel("Amplitud [dB]")
 py.show()
