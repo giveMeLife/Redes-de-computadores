@@ -2,8 +2,11 @@ from scipy.misc import imread
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as imgplt
+from PIL import Image
 
-imagen = imread("leena512.bmp",flatten=False,mode='RGB');
+imagen = Image.open("leena512.bmp")
+matrizImagen = np.array(imagen)
+print(matrizImagen)
 kernel = np.array([ [ 1, 4, 6 ,4, 1],
                     [ 4, 16, 24, 16, 4],
                     [ 6, 24, 36, 24, 6],
@@ -21,5 +24,5 @@ for i in range(2,512):
 
 imgplot = plt.imshow(aux)
 plt.show()
-#print(imagen[0][0])
+#print(imagen[0][0])'''
 
