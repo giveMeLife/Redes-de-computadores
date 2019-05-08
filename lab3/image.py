@@ -22,7 +22,4 @@ for i in range(2,512):
         aux[i][j][1] = imagen[i][j][1]
         aux[i][j][2] = imagen[i][j][2]
 
-imgplot = plt.imshow(aux)
-plt.show()
 #print(imagen[0][0])'''
-
