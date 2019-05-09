@@ -47,21 +47,21 @@ kernelBordes = np.array([[1, 2, 0, -2, -1],
                          [1, 2, 0, -2, -1],
                          [1, 2, 0, -2, -1]])
 
-#kernelSuave = np.multiply(kernelSuave, 1 / 256)
-#newImgSuave = aplicarKernel(img, kernelSuave)
+kernelSuave = np.multiply(kernelSuave, 1 / 256)
+newImgSuave = aplicarKernel(img, kernelSuave)
 #newImgBorde = aplicarKernel(img, kernelBordes)
 print(np.shape(img))
 #Image.fromarray(newImgSuave).show()
 
 #Image.fromarray(newImgBorde).show()
-
-
-f = np.fft.fft2(img)
+#plt.imshow(newImgSuave)
+Image.fromarray(newImgSuave).show()
+f = np.fft.fft2(newImgSuave)
 fshift = np.fft.fftshift(f)
 magnitudFFT = 20*np.log(np.abs(fshift))
-plt.subplot(121),plt.imshow(img, cmap = 'gray')
+plt.subplot(121),plt.imshow(newImgSuave, cmap = 'gray')
 plt.title('Imagen de entrada'), plt.xticks([]), plt.yticks([])
-plt.subplot(122),plt.imshow(magnitudFFT, cmap = 'gray')
+plt.subplot(122),plt.imshow(magnitudFFT)
 plt.title('FFT'), plt.xticks([]), plt.yticks([])
 plt.show()
 
