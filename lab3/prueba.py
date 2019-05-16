@@ -30,6 +30,18 @@ def aplicarKernel(imagen, kernel):
     return newImg
 
 
+def grafico(img,title1,title2):
+    f = np.fft.fft2(img)
+    fshift = np.fft.fftshift(f)
+    magnitudFFT = 20*np.log(np.abs(fshift))
+    plt.subplot(121),plt.imshow(img, cmap = 'gray')
+    plt.title(title1), plt.xticks([]), plt.yticks([])
+    plt.subplot(122),plt.imshow(magnitudFFT)
+    plt.title(title2), plt.xticks([]), plt.yticks([])
+    plt.colorbar()
+    plt.show()
+
+
 # noinspection SpellCheckingInspection
 imagen = Image.open("leena512.bmp")
 
@@ -49,19 +61,9 @@ kernelBordes = np.array([[1, 2, 0, -2, -1],
 
 kernelSuave = np.multiply(kernelSuave, 1 / 256)
 newImgSuave = aplicarKernel(img, kernelSuave)
-#newImgBorde = aplicarKernel(img, kernelBordes)
-print(np.shape(img))
-#Image.fromarray(newImgSuave).show()
+newImgBorde = aplicarKernel(img, kernelBordes)
 
-#Image.fromarray(newImgBorde).show()
-#plt.imshow(newImgSuave)
-Image.fromarray(newImgSuave).show()
-f = np.fft.fft2(newImgSuave)
-fshift = np.fft.fftshift(f)
-magnitudFFT = 20*np.log(np.abs(fshift))
-plt.subplot(121),plt.imshow(newImgSuave, cmap = 'gray')
-plt.title('Imagen de entrada'), plt.xticks([]), plt.yticks([])
-plt.subplot(122),plt.imshow(magnitudFFT)
-plt.title('FFT'), plt.xticks([]), plt.yticks([])
-plt.show()
+grafico(newImgSuave,"Filtro de suavidad","Transformada de Fourier")
+grafico(newImgBorde,"Filtro de borde","Transformada de Fourier")
+
 
