@@ -5,13 +5,13 @@ import matplotlib.image as imgplt
 
 
 def aplicarKernel(imagen, kernel):
-    aux = np.zeros((np.shape(imagen)[0] + 2, np.shape(imagen)[1] + 2), dtype=np.uint8)
+    aux = np.zeros((np.shape(imagen)[0] + 2, np.shape(imagen)[1] + 2))
     for i in range(2, np.shape(aux)[0]):
         for j in range(2, np.shape(aux)[1]):
             aux[i][j] = imagen[i - 2][j - 2]
 
     suma = 0
-    newImg = np.zeros((np.shape(imagen)[0], np.shape(imagen)[1]), dtype=np.uint8)
+    newImg = np.zeros((np.shape(imagen)[0], np.shape(imagen)[1]))
     for i in range(2, np.shape(aux)[0] - 2):
         # print("Soy i ", i)
         for j in range(2, np.shape(aux)[1] - 2):
@@ -62,8 +62,10 @@ kernelBordes = np.array([[1, 2, 0, -2, -1],
 kernelSuave = np.multiply(kernelSuave, 1 / 256)
 newImgSuave = aplicarKernel(img, kernelSuave)
 newImgBorde = aplicarKernel(img, kernelBordes)
+newImgBordeNorm = Image.fromarray(newImgBorde.clip(0,255).astype('uint8'))
+newImgBordeNormArr = np.array(newImgBordeNorm)
 
 grafico(newImgSuave,"Filtro de suavidad","Transformada de Fourier")
 grafico(newImgBorde,"Filtro de borde","Transformada de Fourier")
-
+grafico(newImgBordeNormArr,"Filtro de borde normalizado","Transformada de Fourier")
 
