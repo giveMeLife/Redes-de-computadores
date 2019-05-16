@@ -3,7 +3,14 @@ from PIL import Image
 import matplotlib.pyplot as plt
 import matplotlib.image as imgplt
 
-
+#Entrada: Matriz que representa la imagen y el kernel a aplicar.
+#Procedimiento: Crea una matriz con dos filas y columnas que la imagen original, para luego copiar la información de la imagen en esta matriz,
+#               logrando asi que la imagen tenga un borde.
+#               Se le aplica el kernel a la matriz con borde, donde el resultado se guarda en una matriz de ceros que tiene el mismo tamaño que la 
+#               imagen original.
+#               Cabe destacar que la posicion en la matriz con borde de los pixeles con informacion importante esta corrido en 2, tanto para fila como 
+#               columna.
+#Salida: Matriz resultante tras aplicar el kernel.
 def aplicarKernel(imagen, kernel):
     aux = np.zeros((np.shape(imagen)[0] + 2, np.shape(imagen)[1] + 2))
     for i in range(2, np.shape(aux)[0]):
@@ -13,15 +20,11 @@ def aplicarKernel(imagen, kernel):
     suma = 0
     newImg = np.zeros((np.shape(imagen)[0], np.shape(imagen)[1]))
     for i in range(2, np.shape(aux)[0] - 2):
-        # print("Soy i ", i)
         for j in range(2, np.shape(aux)[1] - 2):
-            #     print("Soy j ", j)
             b = -2
             for k in range(0, np.shape(kernel)[0]):
                 a = -2
                 for l in range(0, np.shape(kernel)[1]):
-                    #                       print("k,l",k,l)
-                    #                       print("a,b",a,b)
                     suma = suma + kernel[k][l] * aux[i + b][j + a]
                     a = a + 1
                 b = b + 1
@@ -29,7 +32,10 @@ def aplicarKernel(imagen, kernel):
             suma = 0
     return newImg
 
-
+#Entrada:n Matriz que contiene la información de la imagen y título de los gráficos.
+#Procedimiento: Calcula la transformada de Fourier para la matriz ingresada, ademas de centrar el cero de la imagen. 
+#               Grafica en conjunto la imagen ingresada y su transformada de Fourier.
+#Salida:
 def grafico(img,title1,title2):
     f = np.fft.fft2(img)
     fshift = np.fft.fftshift(f)
@@ -41,8 +47,7 @@ def grafico(img,title1,title2):
     plt.colorbar()
     plt.show()
 
-
-# noinspection SpellCheckingInspection
+##########################Bloque Principal###################################
 imagen = Image.open("leena512.bmp")
 
 img = np.array(imagen)
@@ -62,6 +67,8 @@ kernelBordes = np.array([[1, 2, 0, -2, -1],
 kernelSuave = np.multiply(kernelSuave, 1 / 256)
 newImgSuave = aplicarKernel(img, kernelSuave)
 newImgBorde = aplicarKernel(img, kernelBordes)
+
+#Normalizacion de la imagen con borde.
 newImgBordeNorm = Image.fromarray(newImgBorde.clip(0,255).astype('uint8'))
 newImgBordeNormArr = np.array(newImgBordeNorm)
 
