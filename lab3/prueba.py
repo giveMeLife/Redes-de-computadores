@@ -68,11 +68,11 @@ kernelSuave = np.multiply(kernelSuave, 1 / 256)
 newImgSuave = aplicarKernel(img, kernelSuave)
 newImgBorde = aplicarKernel(img, kernelBordes)
 
-#Normalizacion de la imagen con borde.
+#Normalizacion de las imágenes.
+newImgSuaveNorm = Image.fromarray(newImgSuave.clip(0,255).astype('uint8'))
 newImgBordeNorm = Image.fromarray(newImgBorde.clip(0,255).astype('uint8'))
-newImgBordeNormArr = np.array(newImgBordeNorm)
+newImgSuaveNorm.save("suave.png")
+newImgBordeNorm.save("borde.png")
 
-grafico(newImgSuave,"Filtro de suavidad","Transformada de Fourier")
-grafico(newImgBorde,"Filtro de borde","Transformada de Fourier")
-grafico(newImgBordeNormArr,"Filtro de borde normalizado","Transformada de Fourier")
-
+grafico(newImgSuaveNorm,"Filtro de suavidad","Transformada de Fourier")
+grafico(newImgBordeNorm,"Filtro de borde","Transformada de Fourier")
