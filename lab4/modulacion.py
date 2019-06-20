@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.io.wavfile as wavfile
 from scipy import signal
-from scipy import interpolate , integrate
+from scipy import interpolate
 
 #Entrada: Nombre del archivo 
 #Proceso: Lee la informacion del archivo de audio. 
@@ -52,7 +52,7 @@ def demodulationAM(data_modulation,rate,k):
 	fc = 3*rate
 	time_interpol = np.linspace(0,len(data_modulation)/rate,num=len(data_modulation))
 	coseno = np.cos(2*np.pi*fc*time_interpol)
-	result = k * data_modulation * coseno
+	result = (data_modulation * coseno) 
 	return result
 
 #Entrada: Cantidad de datos en un segundo, informacion de la señal demodulada.
@@ -67,26 +67,31 @@ def filtradoBajo(rate,data):
 #Entrada: data es la informacion de la señal original, data_interpol es la informacion de la señal interpolada, coseno es la portadora, 
 #		  result es la señal modulada y percentage es el porcentaje aplicado.
 #Process: Grafica la señal original, la portadora y la señal modulada.
-def graphicAM(data,data_interpol,coseno,result,percentage):
+def graphicAM(data,data_interpol,coseno,result,percentage,demodulate):
 	time_interpol = np.linspace(0,len(data_interpol)/rate,num=len(data_interpol))
 	time = np.linspace(0,len(data)/rate,len(data))
 	fig = plt.figure()
 	fig.subplots_adjust(hspace=0.7, wspace=0.7)
-	fig.add_subplot(311)
+	fig.add_subplot(411)
 	plt.title("Señal Original")
 	plt.xlabel("Tiempo [s]")
 	plt.ylabel("Amplitud [dB]")
 	plt.plot(time,data,'b')
-	fig.add_subplot(312)
+	fig.add_subplot(412)
 	plt.title("Señal Portadora con "+ percentage)
 	plt.xlabel("Tiempo [s]")
 	plt.ylabel("Amplitud [dB]")
 	plt.plot(time_interpol,coseno,'g')
-	fig.add_subplot(313)
+	fig.add_subplot(413)
 	plt.title("Señal Modulada con AM al "+ percentage)
 	plt.xlabel("Tiempo [s]")
 	plt.ylabel("Amplitud [dB]")
 	plt.plot(time_interpol,result,'m')
+	fig.add_subplot(414)
+	plt.title("Señal Demodulada con AM al "+ percentage)
+	plt.xlabel("Tiempo [s]")
+	plt.ylabel("Amplitud [dB]")
+	plt.plot(time,demodulate,'y')
 	plt.show()
 
 #Entrada: data es la informacion de la señal original, data_interpol es la informacion de la señal interpolada, coseno es la portadora, 
@@ -162,7 +167,7 @@ dataAM_1,portadoraAM_1,rateAM_1 = modulationAM(data_interpol,rate,1)
 dataDemodulationAM_1 = demodulationAM(dataAM_1,rate,1)
 filtered_1 = filtradoBajo(rate,dataDemodulationAM_1)
 dataFM_1,portadoraFM_1,rateFM_1 = modulationFM(data_interpol,rate,1)
-graphicAM(data,data_interpol,portadoraAM_1,dataAM_1,"100%")
+graphicAM(data,data_interpol,portadoraAM_1,dataAM_1,"100%",filtered_1)
 graphicFM(data,data_interpol,portadoraFM_1,dataFM_1,"100%")
 graphicFourier(data,rate,dataAM_1,rateAM_1,dataFM_1,rateFM_1,filtered_1,"100%")
 
@@ -172,7 +177,7 @@ dataAM_15,portadoraAM_15,rateAM_15 = modulationAM(data_interpol,rate,0.15)
 dataDemodulationAM_15 = demodulationAM(dataAM_15,rate,0.15)
 filtered_15 = filtradoBajo(rate,dataDemodulationAM_15)
 dataFM_15,portadoraFM_15,rateFM_15 = modulationFM(data_interpol,rate,0.15)
-graphicAM(data,data_interpol,portadoraAM_15,dataAM_15,"15%")
+graphicAM(data,data_interpol,portadoraAM_15,dataAM_15,"15%",filtered_15)
 graphicFM(data,data_interpol,portadoraFM_15,dataFM_15,"15%")
 graphicFourier(data,rate,dataAM_15,rateAM_15,dataFM_15,rateFM_15,filtered_15,"15%")
 
@@ -182,6 +187,6 @@ dataAM_125,portadoraAM_125,rateAM_125 = modulationAM(data_interpol,rate,1.25)
 dataDemodulationAM_125 = demodulationAM(dataAM_125,rate,1.25)
 filtered_125 = filtradoBajo(rate,dataDemodulationAM_125)
 dataFM_125,portadoraFM_125,rateFM_125 = modulationFM(data_interpol,rate,1.25)
-graphicAM(data,data_interpol,portadoraAM_125,dataAM_125,"125%")
+graphicAM(data,data_interpol,portadoraAM_125,dataAM_125,"125%",filtered_125)
 graphicFM(data,data_interpol,portadoraFM_125,dataFM_125,"125%")
 graphicFourier(data,rate,dataAM_125,rateAM_125,dataFM_125,rateFM_125,filtered_125,"125%")
