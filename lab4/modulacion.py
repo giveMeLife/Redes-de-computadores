@@ -45,14 +45,14 @@ def modulationFM(data_interpol,rate,k):
 	result = np.cos(first_term + k * integral)
 	return result,coseno,fc
 
-#Entrada: data_modulation es la informacion de la señal modulada, rate es la cantidad de elementos en un segundo.
+#Entrada: data_modulation es la informacion de la señal modulada, rate es la cantidad de elementos en un segundo, ademas del porcentaje.
 #Proceso: Calcula una nueva portadora (un coseno) y lo multiplica con los datos de la modulacion AM.
 #Return: La señal despues de la demodulacion.
-def demodulationAM(data_modulation,rate):
+def demodulationAM(data_modulation,rate,k):
 	fc = 3*rate
 	time_interpol = np.linspace(0,len(data_modulation)/rate,num=len(data_modulation))
 	coseno = np.cos(2*np.pi*fc*time_interpol)
-	result = data_modulation * coseno
+	result = k * data_modulation * coseno
 	return result
 
 #Entrada: Cantidad de datos en un segundo, informacion de la señal demodulada.
@@ -114,6 +114,9 @@ def graphicFM(data,data_interpol,coseno,result,percentage):
 	plt.plot(time_interpol,result,'m')
 	plt.show()
 
+#Entrada: Recibe la informacion de la señal y la cantidad de elementos por segundo.
+#Proceso: Realiza la transformada de Fourier y calcula la frecuencia de esta.
+#Salida: La transformada de Fourier de la señal y su frecuencia.
 def Fourier(data,rate):
 	transData = np.fft.fft(data)
 	freq = np.fft.fftfreq(len(data),1/rate)
@@ -156,7 +159,7 @@ data_interpol = interpolation(rate,data)
 
 ####################### MODULACION 100%#######################################
 dataAM_1,portadoraAM_1,rateAM_1 = modulationAM(data_interpol,rate,1)
-dataDemodulationAM_1 = demodulationAM(dataAM_1,rate)
+dataDemodulationAM_1 = demodulationAM(dataAM_1,rate,1)
 filtered_1 = filtradoBajo(rate,dataDemodulationAM_1)
 dataFM_1,portadoraFM_1,rateFM_1 = modulationFM(data_interpol,rate,1)
 graphicAM(data,data_interpol,portadoraAM_1,dataAM_1,"100%")
@@ -166,7 +169,7 @@ graphicFourier(data,rate,dataAM_1,rateAM_1,dataFM_1,rateFM_1,filtered_1,"100%")
 
 ####################### MODULACION 15%#######################################
 dataAM_15,portadoraAM_15,rateAM_15 = modulationAM(data_interpol,rate,0.15)
-dataDemodulationAM_15 = demodulationAM(dataAM_15,rate)
+dataDemodulationAM_15 = demodulationAM(dataAM_15,rate,0.15)
 filtered_15 = filtradoBajo(rate,dataDemodulationAM_15)
 dataFM_15,portadoraFM_15,rateFM_15 = modulationFM(data_interpol,rate,0.15)
 graphicAM(data,data_interpol,portadoraAM_15,dataAM_15,"15%")
@@ -176,7 +179,7 @@ graphicFourier(data,rate,dataAM_15,rateAM_15,dataFM_15,rateFM_15,filtered_15,"15
 
 ####################### MODULACION 125%#######################################
 dataAM_125,portadoraAM_125,rateAM_125 = modulationAM(data_interpol,rate,1.25)
-dataDemodulationAM_125 = demodulationAM(dataAM_125,rate)
+dataDemodulationAM_125 = demodulationAM(dataAM_125,rate,1.25)
 filtered_125 = filtradoBajo(rate,dataDemodulationAM_125)
 dataFM_125,portadoraFM_125,rateFM_125 = modulationFM(data_interpol,rate,1.25)
 graphicAM(data,data_interpol,portadoraAM_125,dataAM_125,"125%")
