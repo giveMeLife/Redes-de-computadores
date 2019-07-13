@@ -66,13 +66,26 @@ def plotNormal(signal, time, title):
     plt.plot(time,signal)
     plt.show()
 
+def graficoError(valuesE, valuesS):
+    barWidth = 0.25
+    r1 = np.arange(valuesE.size)
+    r2 = [x + barWidth for x in r1]
+    plt.bar(r1, valuesE, color='#6A5ACD', width=barWidth, label="Error")
+    plt.bar(r2, valuesS, color='#6495ED', width=barWidth, label="SNR")
+    plt.xlabel("Pruebas")
+    plt.xticks([r + barWidth for r in range(valuesE.size)], ['Arreglo de bits 1', 'Arreglo de bits 2', 'Arreglo de bits 3'])
+    plt.ylabel("Grado")
+    plt.title("Representación relación entre SNR y Error de recepciónd e bits")
+    plt.legend()
+    plt.show()
+
 def generarAleatorio(largo):
     l = np.random.randint(2,size=largo)
     return l
 
 def calculoError(original, ruidosa):
-    diferencias = np.sum(original == ruidosa)
-    error = diferencias/original.size  
+    diferencias = np.sum(original != ruidosa)
+    error = diferencias/original.size*1.0
     return error
 
 
@@ -104,29 +117,38 @@ plotDigital(bits,time, "Digitalización con ruido")
 bits1 = generarAleatorio(10**3)
 bits2 = generarAleatorio(10**3)
 bits3 = generarAleatorio(10**3)
-
+errores = []
+snr = []
 
 time1 = np.linspace(0,bits1.size,bits1.size)
 plotDigital(bits1,time1, "Bits enviados 10^3")
 salida1, t1 = ask(bits1,1,20)
-señalRuidosa1 = ruido(salida1, 4, t1)
-rbits1 = askReceptor(señalRuidosa,20)
+señalRuidosa1 = ruido(salida1, 1, t1)
+rbits1 = askReceptor(señalRuidosa1,20)
 error1 = calculoError(bits1,rbits1)
 print(error1)
-
+snr.append(1/7.0)
+errores.append(error1)
 
 time2 = np.linspace(0,bits2.size,bits2.size)
 plotDigital(bits2,time2, "Bits enviados 10^3")
 salida2, t2 = ask(bits2,1,20)
-señalRuidosa2 = ruido(salida2, 2, t2)
+señalRuidosa2 = ruido(salida2, 4, t2)
 rbits2 = askReceptor(señalRuidosa2,20)
 error2 = calculoError(bits2,rbits2)
 print(error2)
+snr.append(4/7.0)
+errores.append(error2)
 
 time3 = np.linspace(0,bits3.size,bits3.size)
 plotDigital(bits3,time3, "Bits enviados 10^3")
 salida3, t3 = ask(bits3,1,20)
-señalRuidosa3 = ruido(salida3, 1, t3)
+señalRuidosa3 = ruido(salida3, 7, t3)
 rbits3 = askReceptor(señalRuidosa3,20)
 error3 = calculoError(bits3,rbits3)
 print(error3)
+snr.append(7/7.0)
+errores.append(error3)
+errores = np.array(errores)
+snr = np.array(snr)
+graficoError(errores, snr)
