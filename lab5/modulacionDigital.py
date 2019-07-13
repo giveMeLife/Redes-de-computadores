@@ -4,6 +4,14 @@ import scipy.integrate as it
 from scipy import interpolate, signal
 import random
 
+
+''' 
+Función utilizada para simular un modulador ASK
+Entrada: Un arreglo con bits, un arreglo con el tiempo que dura la transmisión y la frecuencia con la que se desea generar datos con la portadora
+Proceso: Se crean dos portadoras con amplitudes distintas, y se analiza bit por bit, y según el bit se agrega en un arreglo de salida los valores aplicados 
+         a dicha portadora
+Salida: La salida de esta función es el arreglo con los datos generados por las portadoras y un arreglo de tiempo como eje X de dichos datos.
+'''
 def ask(bits, tiempo, frec):
     time = np.linspace(0,tiempo,frec)
     port1 = 1*np.cos(2*np.pi*time*frec*2)
@@ -22,6 +30,13 @@ def ask(bits, tiempo, frec):
     t = np.linspace(0,tiempo*len(bits),salida.size)
     return salida,t
 
+''' 
+Función utilizada para simular un demodulador ASK
+Entrada: Un arreglo con los datos de las portadoras y la frecuencia que indica cada cuantos datos es un bit.
+Proceso: Se analiza el arreglo por tramos, con la cantidad de elementos que corresponden a un bit, y según la amplitud máxima se define si corresponde
+         a un 1 o a un 0
+Salida: Se retorna un arreglo con los bits que se leen.
+'''
 def askReceptor(señal, frec):
     l = []
     Iindex = 0
@@ -39,6 +54,12 @@ def askReceptor(señal, frec):
     return salida
 
 
+'''
+Función que agrega ruido gaussiano aditivo a una señal
+Entrada: La señal a la que se le quiere agregar ruido, SNR y el tiempo en el que ocurre la señal
+Proceso: Se genera ruido gaussiano aditivo con la función normal y luego se suma a la señal original
+Salida: Señal con ruido
+'''
 def ruido(señal, snr, time):
     media = 0
     for elemento in señal:
@@ -51,7 +72,12 @@ def ruido(señal, snr, time):
     return señal+ruido
 
 
-
+'''
+Función que genera un gráfico de bits o señal digital
+Entradas: Arreglod e bits, tiempo en el que se envían, título del gráfico
+Proceso: Se realiza el gráfico con stem
+Salida:
+'''
 def plotDigital(bits, time, title):
     plt.xlabel('Tiempo')
     plt.ylabel('bit')
@@ -59,6 +85,12 @@ def plotDigital(bits, time, title):
     plt.stem(time, bits)
     plt.show()
 
+'''
+Función que genera un gráfico x vs y
+Entradas: Arreglo con datos de la señal, tiempo en el que se envían, título del gráfico
+Proceso: Se realiza el gráfico simple con plot
+Salida:
+'''
 def plotNormal(signal, time, title):
     plt.xlabel('Tiempo')
     plt.ylabel('Energía')
@@ -66,6 +98,12 @@ def plotNormal(signal, time, title):
     plt.plot(time,signal)
     plt.show()
 
+'''
+Función que genera un gráfico de barra con la relación del error (BER) y SNR
+Entrada: Valores de error y valores de SNR
+Proceso: Realiza gráficos de barra comparativos
+Salida:
+'''
 def graficoError(valuesE, valuesS):
     barWidth = 0.25
     r1 = np.arange(valuesE.size)
@@ -79,14 +117,32 @@ def graficoError(valuesE, valuesS):
     plt.legend()
     plt.show()
 
+
+'''
+Función que genera un arreglo con bits aleatorio 
+Entrada: Largo (cantidad de bits que se desean)
+Proceso: Se genera un arreglo de largo ingresado con valores 0 o 1
+Salida: Arreglo con bits
+
+'''
 def generarAleatorio(largo):
     l = np.random.randint(2,size=largo)
     return l
 
+
+''' 
+Función que dadodos arreglos, calcula sus diferencias, en este caso para dos arreglos de bits calcula el BER
+Entrada: Dos arreglos con bits
+Proceso: Cuenta los valores distintos y lo divide por la cantidad de valores
+Salida: Error
+'''
 def calculoError(original, ruidosa):
     diferencias = np.sum(original != ruidosa)
     error = diferencias/original.size*1.0
     return error
+
+
+########################################    MAIN    ########################################
 
 
 ''' Aplicación para caso simple'''
